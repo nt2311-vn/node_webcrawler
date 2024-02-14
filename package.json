@@ -1,0 +1,19 @@
+{
+	"name": "node_webcrawler",
+	"version": "1.0.0",
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"start": "node main.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nt2311-vn/node_webcrawler.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/nt2311-vn/node_webcrawler/issues"
+	},
+	"homepage": "https://github.com/nt2311-vn/node_webcrawler#readme"
+}
