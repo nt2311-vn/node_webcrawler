@@ -14,3 +14,10 @@ test("normalizeURL trim trailling slash", () => {
 	const expected = "google.com.vn/path";
 	expect(actual).toEqual(expected);
 });
+
+test("normalizeURL capitals", () => {
+	const input = "https://GOOGLE.com.VN/path/";
+	const actual = normalizeURL(input);
+	const expected = "google.com.vn/path";
+	expect(actual).toEqual(expected);
+});
