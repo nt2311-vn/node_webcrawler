@@ -6,10 +6,14 @@ const { JSDOM } = require("jsdom");
  * @returns {string} returns the string of htmlbody
  */
 const crawlPage = async (currentURL) => {
-	console.log(`Actively crawling: ${currentURL}`);
-	const resp = await fetch(currentURL);
+	try {
+		console.log(`Actively crawling: ${currentURL}`);
+		const resp = await fetch(currentURL);
 
-	console.log(await resp.text());
+		console.log(await resp.text());
+	} catch (err) {
+		console.log(`Error on fetch page: ${currentURL}, msg: ${err.message}`);
+	}
 };
 
 /**
