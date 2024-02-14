@@ -4,7 +4,14 @@ function main() {
 		process.exit(1);
 	}
 
-	console.log("Start crawling web");
+	if (process.argv.length > 3) {
+		console.log("Too many command line args");
+		process.exit(1);
+	}
+
+	const baseURL = process.argv[2];
+
+	console.log(`Start crawling website:${baseURL}`);
 }
 
 main();
