@@ -15,5 +15,8 @@
 	"bugs": {
 		"url": "https://github.com/nt2311-vn/node_webcrawler/issues"
 	},
-	"homepage": "https://github.com/nt2311-vn/node_webcrawler#readme"
+	"homepage": "https://github.com/nt2311-vn/node_webcrawler#readme",
+	"devDependencies": {
+		"jest": "^29.7.0"
+	}
 }
