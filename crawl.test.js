@@ -1,5 +1,5 @@
 const { test, expect } = require("@jest/globals");
-const { normalizeURL } = require("./crawl.js");
+const { normalizeURL, getURLsFromHTML } = require("./crawl.js");
 
 test("normalizeURL strip protocol", () => {
 	const input = "https://google.com.vn/path";
@@ -19,5 +19,22 @@ test("normalizeURL capitals", () => {
 	const input = "https://GOOGLE.com.VN/path/";
 	const actual = normalizeURL(input);
 	const expected = "google.com.vn/path";
+	expect(actual).toEqual(expected);
+});
+
+test("getURLsFromHTML", () => {
+	const inputHTMLBody = `
+<html>
+  <body>
+    <a href="https://blog.boot.dev/">
+      Boot.dev Blog
+    </a>
+  </body>
+</html>
+`;
+
+	const inputBaseURL = "https://blog.boot.dev";
+	const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL);
+	const expected = ["https://blog.boot.dev/"];
 	expect(actual).toEqual(expected);
 });

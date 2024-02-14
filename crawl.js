@@ -1,4 +1,16 @@
 /**
+ * Extract an array of url given in the htmlbody
+ * @param {string} htmlBody - The body html representation in string format
+ * @param {string} baseURL - The base url of the page
+ * @returns {Array<string>} Returns array of urls in the page html
+ */
+const getURLsFromHTML = (htmlBody, baseURL) => {
+	const urls = [];
+
+	return urls;
+};
+
+/**
  * Normalize all the input url to a single one acceptable url
  * @param {string} urlStr - The string url input
  * @returns {string} returns the standardlize url
@@ -15,4 +27,5 @@ const normalizeURL = (urlStr) => {
 
 module.exports = {
 	normalizeURL,
+	getURLsFromHTML,
 };
