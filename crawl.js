@@ -1,6 +1,18 @@
 const { JSDOM } = require("jsdom");
 
 /**
+ * Crawling page of the url
+ * @param {string} currentURL -  The current url we access to
+ * @returns {string} returns the string of htmlbody
+ */
+const crawlPage = async (currentURL) => {
+	console.log(`Actively crawling: ${currentURL}`);
+	const resp = await fetch(currentURL);
+
+	console.log(await resp.text());
+};
+
+/**
  * Extract an array of url given in the htmlbody
  * @param {string} htmlBody - The body html representation in string format
  * @param {string} baseURL - The base url of the page
@@ -49,4 +61,5 @@ const normalizeURL = (urlStr) => {
 module.exports = {
 	normalizeURL,
 	getURLsFromHTML,
+	crawlPage,
 };
