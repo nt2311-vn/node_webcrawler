@@ -13,9 +13,19 @@ const getURLsFromHTML = (htmlBody, baseURL) => {
 
 	for (const linkElement of linkElements) {
 		if (linkElement.href.slice(0, 1) === "/") {
-			urls.push(`${baseURL}${linkElement.href}`);
+			try {
+				const urlObj = new URL(`${baseURL}${linkElement.href}`);
+				urls.push(urlObj.href);
+			} catch (err) {
+				console.log(`Error with relative url:${err.message}`);
+			}
 		} else {
-			urls.push(linkElement.href);
+			try {
+				const urlObj = new URL(linkElement.href);
+				urls.push(urlObj.href);
+			} catch (err) {
+				console.log(`Error with absolute url:${err.message}`);
+			}
 		}
 	}
 	return urls;
