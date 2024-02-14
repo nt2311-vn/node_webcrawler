@@ -4,13 +4,8 @@
  * @returns {string} returns the standardlize url
  */
 const normalizeURL = (urlStr) => {
-	[protocol, extractURL] = urlStr.split("://");
-
-	if (!extractURL || extractURL.length === 0) {
-		return "";
-	}
-
-	return extractURL.slice(0, extractURL.length - 1);
+	const { hostname, pathname } = new URL(urlStr);
+	return `${hostname}${pathname}`;
 };
 
 module.exports = {
