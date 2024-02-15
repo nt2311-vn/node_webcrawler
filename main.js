@@ -16,7 +16,7 @@ function main() {
 
 	const pages = crawlPage(baseURL, baseURL, {});
 
-	for (const page of pages) {
+	for (const page of Object.entries(pages)) {
 		console.log(page);
 	}
 }

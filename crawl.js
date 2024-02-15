@@ -79,7 +79,7 @@ const crawlPage = async (baseURL, currentURL, pages) => {
 			console.log(
 				`Error with status code: ${resp.status}, on page: ${currentURL}`,
 			);
-			return;
+			return pages;
 		}
 
 		const contentType = resp.headers.get("content-type");
@@ -88,6 +88,8 @@ const crawlPage = async (baseURL, currentURL, pages) => {
 			console.log(
 				`Non html response, content type: ${contentType}, on page: ${currentURL}`,
 			);
+
+			return pages;
 		}
 
 		const htmlBody = await resp.text();
