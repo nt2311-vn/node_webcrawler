@@ -1,34 +1,18 @@
 const { JSDOM } = require("jsdom");
 
 /**
- * Crawling page of the url
- * @param {string} currentURL -  The current url we access to
- * @returns {string} returns the string of htmlbody
+ * Normalize all the input url to a single one acceptable url
+ * @param {string} urlStr - The string url input
+ * @returns {string} returns the standardlize url
  */
-const crawlPage = async (currentURL) => {
-	try {
-		console.log(`Actively crawling: ${currentURL}`);
-		const resp = await fetch(currentURL);
+const normalizeURL = (urlStr) => {
+	const { hostname, pathname } = new URL(urlStr);
+	const hostPath = `${hostname}${pathname}`;
 
-		if (resp.status > 399) {
-			console.log(
-				`Error with status code: ${resp.status}, on page: ${currentURL}`,
-			);
-			return;
-		}
-
-		const contentType = resp.headers.get("content-type");
-
-		if (!contentType.includes("text/html")) {
-			console.log(
-				`Non html response, content type: ${contentType}, on page: ${currentURL}`,
-			);
-		}
-
-		console.log(await resp.text());
-	} catch (err) {
-		console.log(`Error on fetch page: ${currentURL}, msg: ${err.message}`);
+	if (hostPath.length > 0 && hostPath.slice(-1) === "/") {
+		return hostPath.slice(0, -1);
 	}
+	return hostPath;
 };
 
 /**
@@ -63,18 +47,60 @@ const getURLsFromHTML = (htmlBody, baseURL) => {
 };
 
 /**
- * Normalize all the input url to a single one acceptable url
- * @param {string} urlStr - The string url input
- * @returns {string} returns the standardlize url
+ * Crawling page of the url
+ * @param {string} baseURL - The base url of the page
+ * @param {string} currentURL -  The current url we access to
+ * @param {object} pages - The object of pages we have crawled
+ * @returns {string} returns the string of htmlbody
  */
-const normalizeURL = (urlStr) => {
-	const { hostname, pathname } = new URL(urlStr);
-	const hostPath = `${hostname}${pathname}`;
+const crawlPage = async (baseURL, currentURL, pages) => {
+	const baseURLObj = new URL(baseURL);
+	const currentURLObj = new URL(currentURL);
 
-	if (hostPath.length > 0 && hostPath.slice(-1) === "/") {
-		return hostPath.slice(0, -1);
+	if (baseURLObj.hostname !== currentURLObj.hostname) {
+		return pages;
 	}
-	return hostPath;
+
+	const normalizeCurrentURL = normalizeURL(currentURL);
+
+	if (pages[normalizeCurrentURL] > 0) {
+		pages[normalizeCurrentURL]++;
+		return pages;
+	}
+
+	pages[normalizeCurrentURL] = 1;
+
+	console.log(`Actively crawling: ${currentURL}`);
+
+	try {
+		const resp = await fetch(currentURL);
+
+		if (resp.status > 399) {
+			console.log(
+				`Error with status code: ${resp.status}, on page: ${currentURL}`,
+			);
+			return;
+		}
+
+		const contentType = resp.headers.get("content-type");
+
+		if (!contentType.includes("text/html")) {
+			console.log(
+				`Non html response, content type: ${contentType}, on page: ${currentURL}`,
+			);
+		}
+
+		const htmlBody = await resp.text();
+		const nextURLs = getURLsFromHTML(htmlBody, baseURL);
+
+		for (const nextURL of nextURLs) {
+			pages = await crawlPage(baseURL, nextURL, pages);
+		}
+
+		return pages;
+	} catch (err) {
+		console.log(`Error on fetch page: ${currentURL}, msg: ${err.message}`);
+	}
 };
 
 module.exports = {

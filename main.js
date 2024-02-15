@@ -14,7 +14,11 @@ function main() {
 	const baseURL = process.argv[2];
 	console.log(`Start crawling website:${baseURL}`);
 
-	crawlPage(baseURL);
+	const pages = crawlPage(baseURL, baseURL, {});
+
+	for (const page of pages) {
+		console.log(page);
+	}
 }
 
 main();
